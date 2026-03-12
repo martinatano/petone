@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PetOne — Distribución Mayorista</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF; --ink: #1C1C1C; --mid: #666;
+      --light: #E8E3DA; --accent: #2D6A4F; --accent2: #52B788;
+      --warn: #D4A017; --white: #FFFFFF;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 3rem;
+      background: rgba(247,244,239,.95); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--light);
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 4rem; width: auto; display: block; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links a { font-size: .82rem; font-weight: 500; color: var(--mid); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta { background: var(--accent) !important; color: var(--white) !important; padding: .5rem 1.2rem; border-radius: 6px; }
+    .nav-cta:hover { background: #235a42 !important; color: var(--white) !important; }
+
+    /* HERO */
+    .hero-wrap { max-width: 1200px; margin: 0 auto; padding: 7rem 3rem 4rem; display: flex; align-items: center; gap: 4rem; min-height: 100vh; }
+    .hero-left { flex: 1; animation: fadeUp .7s ease both; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: #E8F5EE; color: var(--accent);
+      font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      padding: .35rem .9rem; border-radius: 20px; margin-bottom: 1.8rem;
+    }
+    .hero-badge::before { content: '●'; font-size: .45rem; }
+    .hero-title { font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 700; line-height: 1.1; letter-spacing: -.02em; margin-bottom: 1.2rem; }
+    .hero-title span { color: var(--accent); }
+    .hero-desc { font-size: 1rem; line-height: 1.7; color: var(--mid); max-width: 440px; margin-bottom: 2.5rem; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-block; padding: .85rem 2rem; background: var(--accent); color: var(--white);
+      font-family: 'Outfit', sans-serif; font-size: .85rem; font-weight: 600; letter-spacing: .04em;
+      text-decoration: none; border-radius: 8px; transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover { background: #235a42; transform: translateY(-2px); }
+    .btn-secondary {
+      display: inline-block; padding: .85rem 2rem; background: transparent; color: var(--ink);
+      font-family: 'Outfit', sans-serif; font-size: .85rem; font-weight: 500;
+      text-decoration: none; border-radius: 8px; border: 1.5px solid var(--light);
+      transition: border-color .2s, background .2s;
+    }
+    .btn-secondary:hover { border-color: var(--ink); background: var(--white); }
+
+    .hero-right { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 480px; animation: fadeUp .7s .15s ease both; }
+    .hero-cat-card {
+      background: var(--white); border-radius: 12px; padding: 1.5rem;
+      border: 1px solid var(--light); text-decoration: none; color: var(--ink);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .hero-cat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.07); }
+    .hero-cat-card:nth-child(1) { background: #EAF4EE; border-color: #C5E3D0; }
+    .hero-cat-card:nth-child(2) { background: #FDF6E3; border-color: #EFE0A8; }
+    .hero-cat-card:nth-child(3) { background: #EDF2FB; border-color: #C5D3F0; }
+    .hero-cat-card:nth-child(4) { background: #FDF0ED; border-color: #F0C9C0; }
+    .hero-cat-icon { font-size: 2rem; margin-bottom: .7rem; display: block; }
+    .hero-cat-name { font-size: .88rem; font-weight: 600; }
+    .hero-cat-sub { font-size: .75rem; color: var(--mid); margin-top: .2rem; }
+
+    /* STATS */
+    .stats-bar { background: var(--ink); padding: 2.5rem 3rem; }
+    .stats-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+    .stat { text-align: center; padding: .5rem; border-right: 1px solid rgba(255,255,255,.08); }
+    .stat:last-child { border-right: none; }
+    .stat-num { font-size: 2rem; font-weight: 700; color: var(--accent2); letter-spacing: -.02em; }
+    .stat-label { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-top: .3rem; }
+
+    /* CÓMO FUNCIONA */
+    .how-section { padding: 6rem 3rem; max-width: 1200px; margin: 0 auto; }
+    .section-eyebrow { font-size: .72rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: .8rem; }
+    .section-title { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -.02em; margin-bottom: 2.5rem; }
+    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .step { background: var(--white); border-radius: 12px; padding: 2rem; border: 1px solid var(--light); }
+    .step-num {
+      width: 32px; height: 32px; background: var(--accent); color: var(--white);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; font-weight: 700; margin-bottom: 1rem;
+    }
+    .step-icon { font-size: 1.8rem; margin-bottom: .7rem; }
+    .step-title { font-size: .95rem; font-weight: 600; margin-bottom: .5rem; }
+    .step-desc { font-size: .83rem; line-height: 1.65; color: var(--mid); }
+
+    /* CATEGORÍAS */
+    .cats-section { padding: 3rem 3rem 6rem; background: var(--white); }
+    .cats-inner { max-width: 1200px; margin: 0 auto; }
+    .cats-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2rem; }
+    .cats-link { font-size: .78rem; font-weight: 500; color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent2); padding-bottom: 1px; }
+    .cats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: .8rem; }
+    .cat-pill {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .9rem 1.1rem; background: var(--bg); border-radius: 8px;
+      border: 1px solid var(--light); text-decoration: none; color: var(--ink);
+      transition: background .2s, border-color .2s, transform .15s;
+    }
+    .cat-pill:hover { background: var(--accent); color: var(--white); border-color: var(--accent); transform: translateY(-2px); }
+    .cat-pill-name { font-size: .83rem; font-weight: 500; }
+    .cat-pill-count { font-size: .68rem; color: var(--mid); transition: color .2s; }
+    .cat-pill:hover .cat-pill-count { color: rgba(255,255,255,.65); }
+
+    /* AVISO */
+    .notice { background: #FDF6E3; border-top: 3px solid var(--warn); padding: 1.8rem 3rem; }
+    .notice-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; }
+    .notice-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .notice-text { font-size: .85rem; line-height: 1.6; color: #5a4a1a; }
+    .notice-text strong { font-weight: 600; }
+
+    /* FOOTER */
+    footer { background: var(--ink); padding: 2.5rem 3rem; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo-text { font-size: 1rem; font-weight: 700; color: var(--white); }
+    .footer-logo-sub { font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35); }
+    .footer-copy { font-size: .75rem; color: rgba(255,255,255,.35); }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links .btn-secondary-nav { display: none; }
+      .hero-wrap { flex-direction: column; padding: 6rem 1.5rem 3rem; gap: 2rem; min-height: auto; }
+      .hero-right { max-width: 100%; width: 100%; }
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .how-section { padding: 4rem 1.5rem; }
+      .cats-section { padding: 3rem 1.5rem 4rem; }
+      .notice { padding: 1.5rem; }
+      footer { padding: 2rem 1.5rem; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html"><img src="imagenes/Web 01_pet one.png" alt="PetOne"></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="productos.html">Catálogo</a></li>
+    <li><a href="productos.html" class="nav-cta">Ver productos</a></li>
+  </ul>
+</nav>
+
+<div style="background:var(--bg)">
+  <div class="hero-wrap">
+    <div class="hero-left">
+      <div class="hero-badge">Venta mayorista · Solo revendedores</div>
+      <h1 class="hero-title">Todo para tu<br>negocio <span>pet</span></h1>
+      <p class="hero-desc">Más de 400 productos para perros y gatos. Piedras, camas, rascadores, accesorios y más — con precios mayoristas y entrega directa.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="productos.html">Ver catálogo completo</a>
+        <a class="btn-secondary" href="#categorias">Ver categorías</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <a class="hero-cat-card" href="productos.html?cat=PIEDRAS%20IMPORTADAS">
+        <span class="hero-cat-icon">🪨</span>
+        <div class="hero-cat-name">Piedras sanitarias</div>
+        <div class="hero-cat-sub">Bentonita, silica, pack verde</div>
+      </a>
+      <a class="hero-cat-card" href="productos.html?cat=CUCHAS%20Y%20CAMITAS%20PET-ONE">
+        <span class="hero-cat-icon">🛏️</span>
+        <div class="hero-cat-name">Cuchas y camas</div>
+        <div class="hero-cat-sub">Todos los tamaños</div>
+      </a>
+      <a class="hero-cat-card" href="productos.html?cat=RASCADORES%20PET-ONE">
+        <span class="hero-cat-icon">🐱</span>
+        <div class="hero-cat-name">Rascadores</div>
+        <div class="hero-cat-sub">Simples, puente, cucha</div>
+      </a>
+      <a class="hero-cat-card" href="productos.html">
+        <span class="hero-cat-icon">📦</span>
+        <div class="hero-cat-name">Ver todo</div>
+        <div class="hero-cat-sub">Catálogo completo →</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-num">418</div><div class="stat-label">Productos</div></div>
+    <div class="stat"><div class="stat-num" id="stat-cats">—</div><div class="stat-label">Categorías</div></div>
+    <div class="stat"><div class="stat-num">x caja</div><div class="stat-label">Precio mayorista</div></div>
+    <div class="stat"><div class="stat-num">💬</div><div class="stat-label">Pedidos por WhatsApp</div></div>
+  </div>
+</div>
+
+<section class="how-section">
+  <p class="section-eyebrow">¿Cómo comprar?</p>
+  <h2 class="section-title">Simple y directo</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-icon">🔍</div>
+      <div class="step-title">Explorá el catálogo</div>
+      <p class="step-desc">Navegá por categorías, filtrá por nombre o precio, y revisá las fotos de cada producto.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-icon">🛒</div>
+      <div class="step-title">Armá tu pedido</div>
+      <p class="step-desc">Agregá los productos al carrito con la cantidad que necesitás. El total se calcula solo.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-icon">💬</div>
+      <div class="step-title">Consultá por WhatsApp</div>
+      <p class="step-desc">Con un clic se abre WhatsApp con el listado completo, códigos y precios. Confirmamos y coordinamos la entrega.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cats-section" id="categorias">
+  <div class="cats-inner">
+    <div class="cats-header">
+      <div>
+        <p class="section-eyebrow">Navegá por rubro</p>
+        <h2 class="section-title" style="margin-bottom:0">Categorías</h2>
+      </div>
+      <a class="cats-link" href="productos.html">Ver todos los productos →</a>
+    </div>
+    <div class="cats-grid" id="cats-grid"></div>
+  </div>
+</section>
+
+<div class="notice">
+  <div class="notice-inner">
+    <span class="notice-icon">⚠️</span>
+    <p class="notice-text">
+      <strong>Venta exclusivamente mayorista.</strong>
+      Los precios son por unidad dentro de la caja. Los pedidos se coordinan por WhatsApp. Mínimos y condiciones de entrega a convenir.
+    </p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo-text">PetOne</div>
+      <div class="footer-logo-sub">Distribución mayorista</div>
+    </div>
+    <div class="footer-copy">© 2025 · Todos los derechos reservados</div>
+  </div>
+</footer>
+
+<script>
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
+    return lines.slice(1).filter(l => l.trim()).map(line => {
+      const vals = []; let cur = '', inQ = false;
+      for (const ch of line) {
+        if (ch === '"') { inQ = !inQ; }
+        else if (ch === ',' && !inQ) { vals.push(cur.trim()); cur = ''; }
+        else cur += ch;
+      }
+      vals.push(cur.trim());
+      return Object.fromEntries(headers.map((h, i) => [h, vals[i] || '']));
+    });
+  }
+
+  async function loadCategories() {
+    try {
+      const res = await fetch('productos.csv');
+      const text = await res.text();
+      const productos = parseCSV(text);
+      const cats = {};
+      productos.forEach(p => { if (p.categoria) cats[p.categoria] = (cats[p.categoria]||0)+1; });
+      document.getElementById('stat-cats').textContent = Object.keys(cats).length;
+      document.getElementById('cats-grid').innerHTML = Object.entries(cats)
+        .sort((a,b) => b[1]-a[1])
+        .map(([cat, count]) => `
+          <a class="cat-pill" href="productos.html?cat=${encodeURIComponent(cat)}">
+            <span class="cat-pill-name">${cat}</span>
+            <span class="cat-pill-count">${count} prod.</span>
+          </a>`).join('');
+    } catch(e) {
+      document.getElementById('cats-grid').innerHTML =
+        '<p style="color:var(--mid);font-size:.85rem;grid-column:1/-1">Cargá el catálogo para ver las categorías.</p>';
+    }
+  }
+  loadCategories();
+</script>
+</body>
+</html>
